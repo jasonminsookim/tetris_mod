@@ -63,7 +63,7 @@ def main():
     pygame.display.set_caption('Tetromino for Idiots')
 
     showTextScreen('Tetromino for Idiots')
-    while True: # game loop
+    while True:  # game loop
         if random.randint(0, 1) == 0:
             pygame.mixer.music.load('tetrisb.mid')
         else:

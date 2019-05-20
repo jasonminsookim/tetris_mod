@@ -5,6 +5,18 @@
 
 import random, time, pygame, sys
 from pygame.locals import *
+from PIL import Image
+import glob
+from pathlib import Path
+
+image_path = []
+for filename in glob.glob('../images/*.jpg'):
+    absolute_path = Path(filename).resolve()
+    image_path.append(absolute_path)
+
+elapsed_time = 0
+MAX_AD_SIZE = (200, 200)
+
 
 FPS = 25
 WINDOWWIDTH = 640
@@ -154,29 +166,38 @@ PIECES = {'S': S_SHAPE_TEMPLATE,
           'O': O_SHAPE_TEMPLATE,
           'T': T_SHAPE_TEMPLATE}
 
+# For adding image
+image = str(random.choice(image_path))
+py_image = pygame.image.load(image)
+py_image = pygame.transform.scale(py_image, MAX_AD_SIZE)
+IMAGE_SWITCH_TIME = 1000 * 5 # Changes every 5 seconds
+
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, elapsed_time, MAX_AD_SIZE, py_image
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
     BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
     pygame.display.set_caption('Tetromino')
+    score = 0
 
-    showTextScreen('Tetromino')
+
+    showTextScreen('Tetromino', score, elapsed_time)
     while True: # game loop # This is the leep 
         if random.randint(0, 1) == 0:
             pygame.mixer.music.load('tetrisb.mid')
         else:
             pygame.mixer.music.load('tetrisc.mid')
         pygame.mixer.music.play(-1, 0.0)
-        runGame() # function that actually runs the game. 
+        runGame(score)  # function that actually runs the game.
         pygame.mixer.music.stop()
-        showTextScreen('Game Over')
+        showTextScreen('Game Over', elapsed_time)
 
 
-def runGame():
+def runGame(score):
+    global elapsed_time, py_image, IMAGE_SWITCH_TIME
     # setup variables for the start of the game
     board = getBlankBoard()
     lastMoveDownTime = time.time()
@@ -185,7 +206,6 @@ def runGame():
     movingDown = False # note: there is no movingUp variable
     movingLeft = False
     movingRight = False
-    score = 0
     level, fallFreq = calculateLevelAndFallFreq(score)
 
     fallingPiece = getNewPiece()
@@ -201,7 +221,7 @@ def runGame():
             if not isValidPosition(board, fallingPiece):
                 return # can't fit a new piece on the board, so game over
 
-        checkForQuit()
+        checkForQuit(score)
         for event in pygame.event.get(): # event handling loop
             if event.type == KEYUP:
                 if (event.key == K_p):
@@ -295,8 +315,18 @@ def runGame():
         if fallingPiece != None:
             drawPiece(fallingPiece)
 
+        DISPLAYSURF.blit(py_image, (0, 0))
         pygame.display.update()
-        FPSCLOCK.tick(FPS)
+        dt = FPSCLOCK.tick(FPS)
+        elapsed_time += dt
+
+        if(elapsed_time > IMAGE_SWITCH_TIME):
+            image = str(random.choice(image_path))
+            py_image = pygame.image.load(image)
+            py_image = pygame.transform.scale(py_image, MAX_AD_SIZE)
+            elapsed_time = 0
+
+
 
 
 def makeTextObjs(text, font, color):
@@ -304,16 +334,17 @@ def makeTextObjs(text, font, color):
     return surf, surf.get_rect()
 
 
-def terminate():
-    print()
+
+def terminate(score):
+    print("Total Score: %d" % score)
     pygame.quit()
     sys.exit()
 
 
-def checkForKeyPress():
+def checkForKeyPress(score):
     # Go through event queue looking for a KEYUP event.
     # Grab KEYDOWN events to remove them from the event queue.
-    checkForQuit()
+    checkForQuit(score)
 
     for event in pygame.event.get([KEYDOWN, KEYUP]):
         if event.type == KEYDOWN:
@@ -322,7 +353,7 @@ def checkForKeyPress():
     return None
 
 
-def showTextScreen(text):
+def showTextScreen(text, score, elapsed_time):
     # This function displays large text in the
     # center of the screen until a key is pressed.
     # Draw the text drop shadow
@@ -340,17 +371,19 @@ def showTextScreen(text):
     pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
     DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
 
-    while checkForKeyPress() == None:
+    while checkForKeyPress(score) == None:
         pygame.display.update()
-        FPSCLOCK.tick()
+        dt = FPSCLOCK.tick()
+        elapsed_time += dt
 
 
-def checkForQuit():
+
+def checkForQuit(score):
     for event in pygame.event.get(QUIT): # get all the QUIT events
-        terminate() # terminate if any QUIT events are present
+        terminate(score) # terminate if any QUIT events are present
     for event in pygame.event.get(KEYUP): # get all the KEYUP events
         if event.key == K_ESCAPE:
-            terminate() # terminate if the KEYUP event was for the Esc key
+            terminate(score) # terminate if the KEYUP event was for the Esc key
         pygame.event.post(event) # put the other KEYUP event objects back
 
 
