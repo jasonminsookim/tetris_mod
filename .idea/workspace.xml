@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a7e6864-3a2a-48fb-bbb8-620b4a7cc77f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1061.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1069.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1074.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1075.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1088.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/1061.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/1069.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/1074.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/1075.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/1088.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tetromino/tetromino.py" beforeDir="false" afterPath="$PROJECT_DIR$/tetromino/tetromino.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tetromino/tetrominoforidiots.py" beforeDir="false" afterPath="$PROJECT_DIR$/tetromino/tetrominoforidiots.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,12 +17,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tetromino/tetromino.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="315" column="42" lean-forward="true" selection-start-line="315" selection-start-column="42" selection-end-line="315" selection-end-column="42" />
+            <state relative-caret-position="124">
+              <caret line="41" column="8" lean-forward="true" selection-start-line="41" selection-start-column="8" selection-end-line="41" selection-end-column="8" />
               <folding>
                 <element signature="e#152#184#0" expanded="true" />
               </folding>
@@ -36,27 +34,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>score =</find>
-      <find>score</find>
-      <find>score = 0</find>
-      <find>terminate</find>
-      <find>check</find>
-      <find>checkfor</find>
-      <find>checkforquit</find>
-      <find>displaysurf</find>
-      <find>int_elapsed_time</find>
-      <find>showtext</find>
-      <find>score</find>
-      <find>+=</find>
-      <find>dt</find>
-      <find>elapsed</find>
-      <find>rungame</find>
       <find>global</find>
       <find>showImage</find>
       <find>dt =</find>
       <find>.update</find>
       <find>showImages</find>
       <find>ShowImages</find>
+      <find>score</find>
+      <find>calculateLevelAndFallFreq</find>
+      <find>drawstatus</find>
+      <find>showtextscreen</find>
+      <find>showtext</find>
+      <find>checkforKeyPress</find>
+      <find>calculateLeveland</find>
+      <find>show</find>
+      <find>image</find>
+      <find>py_image</find>
+      <find>random</find>
+      <find>random.rand</find>
+      <find>randint</find>
+      <find>MAX_AD_SIZE</find>
+      <find>random.randin</find>
+      <find>image_path</find>
+      <find>.Clock</find>
+      <find>time</find>
+      <find>switch</find>
+      <find>showTextScreen</find>
+      <find>elapsed_time +=</find>
+      <find>elapsed_time</find>
+      <find>image_swit</find>
+      <find>image_switch</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -80,7 +87,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -91,12 +97,30 @@
             <path>
               <item name="tetris_mod" type="b2602c69:ProjectViewProjectNode" />
               <item name="tetris_mod" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tetris_mod" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tetris_mod" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+              <item name="food_img" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tetris_mod" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tetris_mod" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+              <item name="non_food_img" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tetris_mod" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tetris_mod" type="462c0819:PsiDirectoryNode" />
               <item name="tetromino" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -183,13 +207,9 @@
     <frame x="0" y="23" width="1280" height="777" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25767368" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" weight="0.329927" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.329927" />
@@ -197,11 +217,15 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="R Packages" />
-      <window_info anchor="right" id="R Graphics" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.329927" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.329927" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="R Graphics" order="3" />
+      <window_info anchor="right" id="R Packages" order="4" />
     </layout>
   </component>
   <component name="editorHistoryManager">
@@ -217,8 +241,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tetromino/tetromino.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="315" column="42" lean-forward="true" selection-start-line="315" selection-start-column="42" selection-end-line="315" selection-end-column="42" />
+        <state relative-caret-position="124">
+          <caret line="41" column="8" lean-forward="true" selection-start-line="41" selection-start-column="8" selection-end-line="41" selection-end-column="8" />
           <folding>
             <element signature="e#152#184#0" expanded="true" />
           </folding>

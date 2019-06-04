@@ -9,15 +9,36 @@ from PIL import Image
 import glob
 from pathlib import Path
 
-image_path = []
-for filename in glob.glob('../images/*.jpg'):
+food_image_path = []
+for filename in glob.glob('../images/food_img/*.jpg'):
     absolute_path = Path(filename).resolve()
-    image_path.append(absolute_path)
+    food_image_path.append(absolute_path)
 
-elapsed_time = 0
+not_food_image_path = []
+for filename in glob.glob('../images/non_food_img/*.jpg'):
+    absolute_path = Path(filename).resolve()
+    not_food_image_path.append(absolute_path)
+
+# For adding image
 MAX_AD_SIZE = (200, 200)
+food_image_at_top = random.randint(0,1) == 0
+food_image = str(random.choice(food_image_path))
+food_py_image = pygame.image.load(food_image)
+food_py_image = pygame.transform.scale(food_py_image, MAX_AD_SIZE)
+
+not_food_image = str(random.choice(not_food_image_path))
+not_food_py_image = pygame.image.load(not_food_image)
+not_food_py_image = pygame.transform.scale(not_food_py_image, MAX_AD_SIZE)
+
+image_switch_time = 1000 * random.randint(110, 130) # Changes images every 120 seconds
+score = 0
+
+num_image_flipped = 0
+elapsed_time = 0
+total_elapsed_time = 0
 
 
+LENGTH_GAME = 20*60*1000 # Runs for 20 minutes
 FPS = 25
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
@@ -166,38 +187,35 @@ PIECES = {'S': S_SHAPE_TEMPLATE,
           'O': O_SHAPE_TEMPLATE,
           'T': T_SHAPE_TEMPLATE}
 
-# For adding image
-image = str(random.choice(image_path))
-py_image = pygame.image.load(image)
-py_image = pygame.transform.scale(py_image, MAX_AD_SIZE)
-IMAGE_SWITCH_TIME = 1000 * 5 # Changes every 5 seconds
+
 
 
 def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, elapsed_time, MAX_AD_SIZE, py_image
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, elapsed_time, MAX_AD_SIZE, food_py_image, \
+        not_food_py_image, score, num_image_flipped, food_image_at_top, total_elapsed_time
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
     BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
     pygame.display.set_caption('Tetromino')
-    score = 0
 
 
-    showTextScreen('Tetromino', score, elapsed_time)
-    while True: # game loop # This is the leep 
+    showTextScreen('Tetromino')
+    while True: # game loop # This is the leep
         if random.randint(0, 1) == 0:
             pygame.mixer.music.load('tetrisb.mid')
         else:
             pygame.mixer.music.load('tetrisc.mid')
         pygame.mixer.music.play(-1, 0.0)
-        runGame(score)  # function that actually runs the game.
+        runGame()  # function that actually runs the game.
         pygame.mixer.music.stop()
-        showTextScreen('Game Over', elapsed_time)
+        showTextScreen('Game Over')
 
 
-def runGame(score):
-    global elapsed_time, py_image, IMAGE_SWITCH_TIME
+def runGame():
+    global elapsed_time, food_py_image, not_food_py_image, IMAGE_SWITCH_TIME, score, food_image_at_top, \
+        total_elapsed_time, image_switch_time
     # setup variables for the start of the game
     board = getBlankBoard()
     lastMoveDownTime = time.time()
@@ -208,10 +226,15 @@ def runGame(score):
     movingRight = False
     level, fallFreq = calculateLevelAndFallFreq(score)
 
+    # start time
+    start_time = pygame.time.get_ticks()
+
     fallingPiece = getNewPiece()
     nextPiece = getNewPiece()
 
     while True: # game loop
+        dt = FPSCLOCK.tick()
+        elapsed_time += dt
         if fallingPiece == None:
             # No falling piece in play, so start a new piece at the top
             fallingPiece = nextPiece
@@ -221,7 +244,7 @@ def runGame(score):
             if not isValidPosition(board, fallingPiece):
                 return # can't fit a new piece on the board, so game over
 
-        checkForQuit(score)
+        checkForQuit()
         for event in pygame.event.get(): # event handling loop
             if event.type == KEYUP:
                 if (event.key == K_p):
@@ -310,21 +333,41 @@ def runGame(score):
         # drawing everything on the screen
         DISPLAYSURF.fill(BGCOLOR)
         drawBoard(board)
-        drawStatus(score, level)
+        drawStatus(score ,level)
         drawNextPiece(nextPiece)
         if fallingPiece != None:
             drawPiece(fallingPiece)
 
-        DISPLAYSURF.blit(py_image, (0, 0))
-        pygame.display.update()
-        dt = FPSCLOCK.tick(FPS)
-        elapsed_time += dt
+        if food_image_at_top:
+            DISPLAYSURF.blit(food_py_image, (0, 0))
+            DISPLAYSURF.blit(not_food_py_image, (0, WINDOWHEIGHT - 200))
+            pygame.display.update()
+        else:
+            DISPLAYSURF.blit(not_food_py_image, (0, 0))
+            DISPLAYSURF.blit(food_py_image, (0, WINDOWHEIGHT - 200))
+            pygame.display.update()
 
-        if(elapsed_time > IMAGE_SWITCH_TIME):
-            image = str(random.choice(image_path))
-            py_image = pygame.image.load(image)
-            py_image = pygame.transform.scale(py_image, MAX_AD_SIZE)
+        if(elapsed_time > image_switch_time):
+            food_image = str(random.choice(food_image_path))
+            food_py_image = pygame.image.load(food_image)
+            food_py_image = pygame.transform.scale(food_py_image, MAX_AD_SIZE)
+
+            not_food_image = str(random.choice(not_food_image_path))
+            not_food_py_image = pygame.image.load(not_food_image)
+            not_food_py_image = pygame.transform.scale(not_food_py_image, MAX_AD_SIZE)
+
+            image_switch_time = 1000 * random.randint(110, 130)
+
             elapsed_time = 0
+            if food_image_at_top:
+                food_image_at_top = False
+            else:
+                food_image_at_top = True
+
+        current_time = pygame.time.get_ticks()
+
+        if(current_time - start_time >= LENGTH_GAME):
+            terminate()
 
 
 
@@ -335,16 +378,16 @@ def makeTextObjs(text, font, color):
 
 
 
-def terminate(score):
+def terminate():
     print("Total Score: %d" % score)
     pygame.quit()
     sys.exit()
 
 
-def checkForKeyPress(score):
+def checkForKeyPress():
     # Go through event queue looking for a KEYUP event.
     # Grab KEYDOWN events to remove them from the event queue.
-    checkForQuit(score)
+    checkForQuit()
 
     for event in pygame.event.get([KEYDOWN, KEYUP]):
         if event.type == KEYDOWN:
@@ -353,7 +396,7 @@ def checkForKeyPress(score):
     return None
 
 
-def showTextScreen(text, score, elapsed_time):
+def showTextScreen(text):
     # This function displays large text in the
     # center of the screen until a key is pressed.
     # Draw the text drop shadow
@@ -371,19 +414,17 @@ def showTextScreen(text, score, elapsed_time):
     pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
     DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
 
-    while checkForKeyPress(score) == None:
+    while checkForKeyPress() == None:
         pygame.display.update()
-        dt = FPSCLOCK.tick()
-        elapsed_time += dt
 
 
 
-def checkForQuit(score):
+def checkForQuit():
     for event in pygame.event.get(QUIT): # get all the QUIT events
-        terminate(score) # terminate if any QUIT events are present
+        terminate() # terminate if any QUIT events are present
     for event in pygame.event.get(KEYUP): # get all the KEYUP events
         if event.key == K_ESCAPE:
-            terminate(score) # terminate if the KEYUP event was for the Esc key
+            terminate() # terminate if the KEYUP event was for the Esc key
         pygame.event.post(event) # put the other KEYUP event objects back
 
 
